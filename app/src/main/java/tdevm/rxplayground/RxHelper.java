@@ -26,11 +26,9 @@ public class RxHelper {
         });
     }
 
-    public static void lambdaObservableJust(){
-        Observable.just("short").subscribe(s ->
-            Log.d(TAG,s)
-        );
-    }
+//    public static void lambdaObservableJust(){
+//        Observable.just("short").subscribe(s -> Log.d(TAG,s));
+//    }
 
     public static void ObservableJustFilter(){
         Observable<Integer> observable = Observable.just(1,2,3,4,5).filter(new Predicate<Integer>() {

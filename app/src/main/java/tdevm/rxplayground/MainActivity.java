@@ -20,7 +20,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    Button button, subscribeButton;
+    Button button, subscribeButton, networkRequest;
     Subscription subscription;
 
     @Override
@@ -29,14 +29,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = (Button)findViewById(R.id.btn_start);
         subscribeButton = (Button)findViewById(R.id.btn_subscribe);
-        button.setOnClickListener(view -> {
-            RxHelper.ObservableJust();
-            String[] strings = {"x","y","z"};
-            RxHelper.basicNameObservable(strings);
-            RxHelper.ObservableJustFilter();
+        networkRequest = (Button)findViewById(R.id.btn_network);
 
-            TestWrap.wrapTest();
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RxHelper.ObservableJust();
+                String[] strings = {"x","y","z"};
+                RxHelper.basicNameObservable(strings);
+                RxHelper.ObservableJustFilter();
+
+                TestWrap.wrapTest();
+            }
         });
+
 
         //The basic three step process to create an async reactive programming pattern.
 
@@ -78,12 +85,47 @@ public class MainActivity extends AppCompatActivity {
 
         // 3.Join them together. i.e Subscribe
 
-        subscribeButton.setOnClickListener(view ->
-            stringObservable.subscribeOn(Schedulers.io())             //Observable runs on io thread
-                    .observeOn(AndroidSchedulers.mainThread())        //Observer runs on main thread
-                    .subscribe(observer)
-        );
+        subscribeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stringObservable.subscribeOn(Schedulers.io())             //Observable runs on io thread
+                        .observeOn(AndroidSchedulers.mainThread())        //Observer runs on main thread
+                        .subscribe(observer);
+            }
+        });
 
+        networkRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final API api = Network.getClient().create(API.class);
+                api.getMyGist("8b77204dabd4e8044df6b07eff4fcac8")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Object>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                Log.d(TAG, "onSubscribe");
+
+                            }
+
+                            @Override
+                            public void onNext(@NonNull Object o) {
+                                Log.d(TAG, "onNext(" + o + ")");
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                Log.i(TAG, "onComplete()");
+
+                            }
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                Log.d(TAG, "onError(" + e.getMessage() + ")");
+
+                            }
+                        });
+            }
+        });
     }
 
 
