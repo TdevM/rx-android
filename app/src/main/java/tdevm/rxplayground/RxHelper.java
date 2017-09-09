@@ -45,7 +45,7 @@ public class RxHelper {
 
 
 
-
+    //Observer for Observable
     private static <T> void output(Observable<T> obs) {  //Generic
 
         obs.subscribe(new Observer<T>() {

@@ -4,8 +4,11 @@ import android.util.Log;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Tridev on 10-09-2017.
@@ -41,6 +44,8 @@ public class TestWrap {
 
             }
         };
-            observable.subscribe(observer);
+            observable.subscribeOn(Schedulers.io()) //Observable runs on io thread
+                      .observeOn(AndroidSchedulers.mainThread()) //Observer [from rx-android runs on main thread]
+                      .subscribe(observer);
     }
 }
