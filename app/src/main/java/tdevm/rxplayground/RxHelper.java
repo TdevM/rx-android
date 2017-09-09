@@ -21,9 +21,15 @@ public class RxHelper {
         Observable.just("Hello World").subscribe(new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {
-                Log.d(TAG,s);
+
             }
         });
+    }
+
+    public static void lambdaObservableJust(){
+        Observable.just("short").subscribe(s ->
+            Log.d(TAG,s)
+        );
     }
 
     public static void ObservableJustFilter(){

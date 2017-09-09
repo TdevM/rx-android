@@ -29,16 +29,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = (Button)findViewById(R.id.btn_start);
         subscribeButton = (Button)findViewById(R.id.btn_subscribe);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                RxHelper.ObservableJust();
-                  String[] strings = {"x","y","z"};
-                  RxHelper.basicNameObservable(strings);
-                  RxHelper.ObservableJustFilter();
+        button.setOnClickListener(view -> {
+            RxHelper.ObservableJust();
+            String[] strings = {"x","y","z"};
+            RxHelper.basicNameObservable(strings);
+            RxHelper.ObservableJustFilter();
 
-                  TestWrap.wrapTest();
-            }
+            TestWrap.wrapTest();
         });
 
         //The basic three step process to create an async reactive programming pattern.
@@ -81,14 +78,23 @@ public class MainActivity extends AppCompatActivity {
 
         // 3.Join them together. i.e Subscribe
 
-        subscribeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                 stringObservable.subscribeOn(Schedulers.io())             //Observable runs on io thread
-                        .observeOn(AndroidSchedulers.mainThread())//Observer runs on main thread
-                        .subscribe(observer);
-            }
-        });
+        subscribeButton.setOnClickListener(view ->
+            stringObservable.subscribeOn(Schedulers.io())             //Observable runs on io thread
+                    .observeOn(AndroidSchedulers.mainThread())        //Observer runs on main thread
+                    .subscribe(observer)
+        );
 
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }
