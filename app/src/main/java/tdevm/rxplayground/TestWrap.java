@@ -2,6 +2,8 @@ package tdevm.rxplayground;
 
 import android.util.Log;
 
+import org.reactivestreams.Subscription;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
@@ -48,4 +50,5 @@ public class TestWrap {
                       .observeOn(AndroidSchedulers.mainThread()) //Observer [from rx-android runs on main thread]
                       .subscribe(observer);
     }
+
 }
