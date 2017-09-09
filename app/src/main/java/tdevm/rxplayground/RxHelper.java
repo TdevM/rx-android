@@ -27,13 +27,14 @@ public class RxHelper {
     }
 
     public static void ObservableJustFilter(){
-        Observable.just(1,2,3,4,5).filter(new Predicate<Integer>() {
+        Observable<Integer> observable = Observable.just(1,2,3,4,5).filter(new Predicate<Integer>() {
             @Override
             public boolean test(@NonNull Integer integer) throws Exception {
 
                 return integer%2==0;
             }
-        }).subscribe();
+        });
+        output(observable);
 
     }
 
@@ -45,7 +46,7 @@ public class RxHelper {
 
 
 
-    private static <T> void output(Observable<T> obs) {
+    private static <T> void output(Observable<T> obs) {  //Generic
 
         obs.subscribe(new Observer<T>() {
             @Override

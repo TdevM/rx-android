@@ -17,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                RxHelper.ObservableJust();
-                String[] strings = {"x","y","z"};
-                RxHelper.basicNameObservable(strings);
+                  String[] strings = {"x","y","z"};
+                  RxHelper.basicNameObservable(strings);
                   RxHelper.ObservableJustFilter();
 
                   TestWrap.wrapTest();
