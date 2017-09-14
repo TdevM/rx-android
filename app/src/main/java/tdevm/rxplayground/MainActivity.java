@@ -8,6 +8,9 @@ import android.widget.Button;
 
 import org.reactivestreams.Subscription;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -16,20 +19,60 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
+import tdevm.rxplayground.di.NetworkComponent;
+import tdevm.rxplayground.di.NetworkModule;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    Button button, subscribeButton, networkRequest;
+    @Inject
+    Retrofit retrofit;
+
+    Button button, subscribeButton, networkRequest,dagger;
     Subscription subscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button = (Button)findViewById(R.id.btn_start);
-        subscribeButton = (Button)findViewById(R.id.btn_subscribe);
-        networkRequest = (Button)findViewById(R.id.btn_network);
+        button = findViewById(R.id.btn_start);
+        subscribeButton = findViewById(R.id.btn_subscribe);
+        networkRequest =  findViewById(R.id.btn_network);
+        dagger = findViewById(R.id.btn_dagger);
+        //Inject in onCreate();
+        ((MyApplication)getApplication()).getNetworkComponent().inject(MainActivity.this);
+
+        dagger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final API api = retrofit.create(API.class);
+                api.getMyGist("8b77204dabd4e8044df6b07eff4fcac8").subscribeOn(Schedulers.io())
+                                                                  .observeOn(AndroidSchedulers.mainThread())
+                                                                   .subscribe(new Observer<Object>() {
+                                                                       @Override
+                                                                       public void onSubscribe(@NonNull Disposable d) {
+                                                                           Log.d(TAG, "onSubscribe");
+                                                                       }
+
+                                                                       @Override
+                                                                       public void onComplete() {
+                                                                           Log.i(TAG, "onComplete()");
+                                                                       }
+
+                                                                       @Override
+                                                                       public void onNext(@NonNull Object o) {
+                                                                           Log.d(TAG, "onNext(" + o + ")");
+                                                                       }
+
+                                                                       @Override
+                                                                       public void onError(@NonNull Throwable e) {
+                                                                           Log.d(TAG,"stringObserver onError");
+
+                                                                       }
+                                                                   });
+            }
+        });
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // 3.Join them together. i.e Subscribe
-
         subscribeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
