@@ -2,6 +2,7 @@ package tdevm.rxplayground;
 
 import android.app.Application;
 
+import tdevm.rxplayground.di.AppModule;
 import tdevm.rxplayground.di.DaggerNetworkComponent;
 import tdevm.rxplayground.di.NetworkComponent;
 import tdevm.rxplayground.di.NetworkModule;
@@ -17,8 +18,10 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        networkComponent = DaggerNetworkComponent.builder().
-                networkModule(new NetworkModule(BASE_URL))
+        networkComponent = DaggerNetworkComponent.builder()
+                // list of modules that are part of this component need to be created here too
+                .appModule(new AppModule(this))
+                .networkModule(new NetworkModule(BASE_URL))
                 .build();
 
     }

@@ -47,30 +47,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final API api = retrofit.create(API.class);
-                api.getMyGist("8b77204dabd4e8044df6b07eff4fcac8").subscribeOn(Schedulers.io())
-                                                                  .observeOn(AndroidSchedulers.mainThread())
-                                                                   .subscribe(new Observer<Object>() {
-                                                                       @Override
-                                                                       public void onSubscribe(@NonNull Disposable d) {
-                                                                           Log.d(TAG, "onSubscribe");
-                                                                       }
+                api.getMyGist("c54a5f3bfa53d40191ff13319e69ed77")
+                        .subscribeOn(Schedulers.io())
+                          .observeOn(AndroidSchedulers.mainThread())
+                           .subscribe(new Observer<Object>() {
+                               @Override
+                               public void onSubscribe(@NonNull Disposable d) {
+                                   Log.d(TAG, "onSubscribe");
+                               }
 
-                                                                       @Override
-                                                                       public void onComplete() {
-                                                                           Log.i(TAG, "onComplete()");
-                                                                       }
+                               @Override
+                               public void onComplete() {
+                                   Log.i(TAG, "onComplete()");
+                               }
 
-                                                                       @Override
-                                                                       public void onNext(@NonNull Object o) {
-                                                                           Log.d(TAG, "onNext(" + o + ")");
-                                                                       }
+                               @Override
+                               public void onNext(@NonNull Object o) {
+                                   Log.d(TAG, "onNext(" + o + ")");
+                               }
 
-                                                                       @Override
-                                                                       public void onError(@NonNull Throwable e) {
-                                                                           Log.d(TAG,"stringObserver onError");
+                               @Override
+                               public void onError(@NonNull Throwable e) {
+                                   Log.d(TAG,"stringObserver onError" + e);
 
-                                                                       }
-                                                                   });
+                               }
+                           });
             }
         });
 

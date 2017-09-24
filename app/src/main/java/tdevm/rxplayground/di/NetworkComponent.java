@@ -9,7 +9,7 @@ import tdevm.rxplayground.MainActivity;
  * Created by Tridev on 14-09-2017.
  */
 @Singleton
-@Component(modules = {NetworkModule.class})
+@Component(modules = {AppModule.class,NetworkModule.class})
 public interface NetworkComponent {
-    public void inject(MainActivity activity);
+    void inject(MainActivity activity);
 }
